@@ -120,11 +120,13 @@ def find_matching_image(embeddingList,targetembedding):
 
 if __name__ == "__main__":
   print("Creating Embeddings")
-  target = download_and_resize('D:/ORG India/data/all_data/1657518842216-unilever sri lanka ltd-fair - lovely advanced multi vitamin#3.png')
+  all_data = "../../data/all_data"
+  data_path = "D:/ORG India/data/all_data/30311-ceylon biscuits limited-munchee chocolate cream#1.png"
+  target = download_and_resize(data_path)
   targetEmbedding = run_delf(target)
-  sourceEmbeddding = create_source_embedding_from_files(os.listdir("../data/all_data")[:1])
+  sourceEmbeddding = create_source_embedding_from_files(os.listdir(all_data)[:1])
   #find_matching_image(sourceEmbeddding,targetEmbedding)
   print(type(target) == PIL.Image.Image)
   saliency_matrix = generate_saliency_matrix(target,run_delf,create_source_embedding_from_pil,match_images,50,25)
-  plot_saliency_map(saliency_matrix,'D:/ORG India/data/all_data/1657518842216-unilever sri lanka ltd-fair - lovely advanced multi vitamin#3.png')
+  plot_saliency_map(saliency_matrix,data_path)
 
