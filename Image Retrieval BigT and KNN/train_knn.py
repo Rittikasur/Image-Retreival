@@ -11,9 +11,9 @@ Original file is located at
 ## Initial-Setup
 """
 
-!nvidia-smi
+# !nvidia-smi
 
-!cp -r '/content/drive/MyDrive/Similar-Image-Search/model_bit.h5' '/content/'
+# !cp -r '/content/drive/MyDrive/Similar-Image-Search/model_bit.h5' '/content/'
 
 """## Import the necessary modules"""
 

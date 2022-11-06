@@ -3,9 +3,9 @@ import numpy as np
 import re
 import tensorflow as tf
 import matplotlib.pyplot as plt
-import tqdm
 import os
-from PIL import Image
+# from Benchmark.SaliencyMap import generate_saliency_matrix,plot_saliency_map
+
 class MAC():
     def __init__(self,L):
         self.L = L
@@ -95,47 +95,59 @@ class MAC():
         return finalfeature
 
 
-    def create_source_embedding_from_cvimage(self,list_of_files):
-        print('%d Cv Image Images found'%len(list_of_files))
+    def create_source_embedding_from_cvimage(self,list_of_image_array):
+        print('%d Cv Image Images found'%len(list_of_image_array))
         embeddingList=[]
         embedding_with_meta = []
-        for eachFile in list_of_files:
+        for eachImage in list_of_image_array:
             distlist = []
-            referenceimage = cv2.imread(os.path.join("D:/ORG India/data/all_data/",eachFile))
-            centers = self.calculate_centers(referenceimage.shape[0],referenceimage.shape[1])
-            all_patches = self.all_patches(centers,referenceimage)
+            # eachImage = cv2.imread(os.path.join("D:/ORG India/data/all_data/",eachFile))
+            centers = self.calculate_centers(eachImage.shape[0],eachImage.shape[1])
+            all_patches = self.all_patches(centers,eachImage)
             extractedfeature = []
             for ap in all_patches:
                 returnedfeature = self.extractfeature(ap)
                 extractedfeature.append(returnedfeature)
-            embedding_with_meta.append({"name":eachFile,"embedding":extractedfeature})
+            embedding_with_meta.append({"name":"eachFile","embedding":extractedfeature})
         print("Embedding Created from CV Image")
         return embedding_with_meta
 
-    def scoring_function(self,source_embedding_with_meta,target_embedding):
+    def scoring_function(self,target_embedding,source_embedding_with_meta):
         distlist = []
         minindex = 1000
-        for ef in source_embedding_with_meta:
-            dist = np.linalg.norm(ef["embedding"] - target_embedding)
+        for ef in source_embedding_with_meta["embedding"]:
+            dist = np.linalg.norm(ef - target_embedding)
             distlist.append(dist)
             if(min(distlist)<minindex):
                 minindex = min(distlist)
-                minindexpath = ef["name"]
-        print(ef['name'])
         return minindex
 
 if __name__=="__main__":
-    query_data = "D:/Rohit/ORG India/images/husky.jpg"
+    all_data = "../../data/all_data"
+    data_path = "D:/ORG India/data/all_data/30311-ceylon biscuits limited-munchee chocolate cream#1.png"
+    query_data ="D:/ORG India/data/all_data/30311-ceylon biscuits limited-munchee chocolate cream#1.png"
     mac = MAC(4)
     mac.featuremodel()
 
     # The model for feature extraction
     query = cv2.imread(query_data) #D:\Rohit\ORG India\images\image_effect_HUc1.png
+    query = cv2.resize(query, (256, 256))
     queryImageFeature = mac.extractfeature(query)
 
     path = "D:/ORG India/data/all_data/"
     referenceimages = os.listdir(path)[:3]
-    exfea = mac.create_source_embedding_from_cvimage(referenceimages)
-    mac.scoring_function(exfea,queryImageFeature)
+    reference_image_array_list = []
+    for refImage in referenceimages:
+        temp_image_arr = cv2.imread(os.path.join("D:/ORG India/data/all_data/",refImage))
+        reference_image_array_list.append(temp_image_arr)
+    exfea = mac.create_source_embedding_from_cvimage(reference_image_array_list)
+    for i in range(len(exfea)):
+        embeddings = exfea[i]
+        score = mac.scoring_function(queryImageFeature,embeddings)
+        print("for index  the score is ",score)
+
+    #Generating Saliency Graph in the output folders
+    # saliency_matrix = generate_saliency_matrix(query,mac.extractfeature,mac.create_source_embedding_from_cvimage,mac.scoring_function,50,25,use_pil=False)
+    # plot_saliency_map(saliency_matrix,data_path)
 
     

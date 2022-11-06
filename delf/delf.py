@@ -14,7 +14,7 @@ import tensorflow as tf
 
 import tensorflow_hub as hub
 
-from Benchmark.SaliencyMap import generate_saliency_matrix,plot_saliency_map
+# from Benchmark.SaliencyMap import generate_saliency_matrix,plot_saliency_map
 # from six.moves.urllib.request import urlopen
 # embeddingList = []
 # tf.logging.set_verbosity(tf.logging.ERROR)
@@ -65,6 +65,8 @@ def match_images(result1, result2):
       if indices[i] != num_features_1
   ])
 
+  print("location for use")
+  print(locations_1_to_use.shape,locations_2_to_use.shape)
   # Perform geometric verification using RANSAC.
   _, inliers = ransac(
       (locations_1_to_use, locations_2_to_use),
@@ -118,15 +120,15 @@ def find_matching_image(embeddingList,targetembedding):
 
 
 
-if __name__ == "__main__":
-  print("Creating Embeddings")
-  all_data = "../../data/all_data"
-  data_path = "D:/ORG India/data/all_data/30311-ceylon biscuits limited-munchee chocolate cream#1.png"
-  target = download_and_resize(data_path)
-  targetEmbedding = run_delf(target)
-  sourceEmbeddding = create_source_embedding_from_files(os.listdir(all_data)[:1])
-  #find_matching_image(sourceEmbeddding,targetEmbedding)
-  print(type(target) == PIL.Image.Image)
-  saliency_matrix = generate_saliency_matrix(target,run_delf,create_source_embedding_from_pil,match_images,50,25)
-  plot_saliency_map(saliency_matrix,data_path)
+# if __name__ == "__main__":
+#   print("Creating Embeddings")
+#   all_data = "../../data/all_data"
+#   data_path = "D:/ORG India/data/all_data/30311-ceylon biscuits limited-munchee chocolate cream#1.png"
+#   target = download_and_resize(data_path)
+#   targetEmbedding = run_delf(target)
+#   sourceEmbeddding = create_source_embedding_from_files(os.listdir(all_data)[:1])
+#   #find_matching_image(sourceEmbeddding,targetEmbedding)
+#   print(type(target) == PIL.Image.Image)
+#   saliency_matrix = generate_saliency_matrix(target,run_delf,create_source_embedding_from_pil,match_images,50,25)
+#   plot_saliency_map(saliency_matrix,data_path)
 

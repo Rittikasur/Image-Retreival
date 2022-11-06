@@ -1,0 +1,4 @@
+https://github.com/naver/deep-image-retrieval
+
+The Models are made in pytorch 1.4- and with ercent version we cannot load it. So....
+https://europe.naverlabs.com/Research/Computer-Vision/Learning-Visual-Representations/Deep-Image-Retrieval/
