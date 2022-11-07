@@ -60,10 +60,21 @@ class DBClass:
                         data=[embedding], 
                         anns_field=search_column, 
                         param=search_params, 
-                        limit=2, 
+                        limit=5, 
                         expr=None,
                         consistency_level="Strong"
                     )
         self.collection.release()
         return results
+
+    def querywithId(self,list_of_ids):
+        self.collection.load()
+        expression = "sku_id " +"in [" +",".join(map(str,list_of_ids)) +"]"
+        res = self.collection.query(
+            expr = expression, 
+            output_fields = ["sku_name"],
+            consistency_level="Strong"
+            )
+        self.collection.release()
+        return res
 
