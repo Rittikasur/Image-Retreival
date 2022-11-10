@@ -18,6 +18,12 @@ class Config:
             self.INPUT_DIMS = (224,224)
             self.MILVUS_DBNAME="ORGIndia_mobilenet_v1"
             self.FEATURE_VECTOR_SIZE = 1024
+        elif(model_name == "mobilenet_v2"):
+            print(model_name,"is being used")
+            self.MODEL_WEIGHTS = "https://tfhub.dev/google/imagenet/mobilenet_v2_140_224/feature_vector/5"
+            self.INPUT_DIMS = (224,224)
+            self.MILVUS_DBNAME="ORGIndia_mobilenet_v2"
+            self.FEATURE_VECTOR_SIZE = 1792
         else:
             print(model_name,"is being used")
             self.MILVUS_DBNAME="ORGIndia_inceptionv3"
