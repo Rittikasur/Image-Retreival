@@ -25,9 +25,10 @@ class DBClass:
         port=port
         )
 
-    def getCollection(self,CollectionName):
+    def getCollection(self,CollectionName,dimension=100):
         if(self.collection is None):
-            self.loadOrCreate_collection(CollectionName)
+            self.loadOrCreate_collection(CollectionName,dimension=dimension)
+        self.collection.load()
         return self.collection
 
     def loadOrCreate_collection(self,Collection_name,dimension=100,indexed_column="sku_embedding"):
@@ -46,6 +47,7 @@ class DBClass:
                         field_name=indexed_column, 
                         index_params=self.index_params
                 )
+        self.collection.load()
 
     def insertData(self,name,embedding):
         print("inserting Data")
@@ -55,26 +57,27 @@ class DBClass:
 
     def searchEmbedding(self,embedding,search_column="sku_embedding"):
         search_params = {"metric_type": "L2", "params": {"nprobe": 10}}
-        self.collection.load()
         results = self.collection.search(
                         data=[embedding], 
                         anns_field=search_column, 
                         param=search_params, 
-                        limit=5, 
+                        limit=3, 
                         expr=None,
                         consistency_level="Strong"
                     )
-        self.collection.release()
         return results
 
     def querywithId(self,list_of_ids):
-        self.collection.load()
         expression = "sku_id " +"in [" +",".join(map(str,list_of_ids)) +"]"
         res = self.collection.query(
             expr = expression, 
             output_fields = ["sku_name"],
             consistency_level="Strong"
             )
-        self.collection.release()
         return res
+
+    def releaseCollectionFromMemory(self):
+        print("Milvis Collection release from memory")
+        if(self.collection is not None):
+            self.collection.release()
 
