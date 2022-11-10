@@ -59,7 +59,7 @@ def create_source_embedding_from_cvimage(list_of_image_array):
     return(list_of_embeddings)
 
 def scoring_function(source,target):
-    result = spatial.distance.cosine(source, target)
+    result = 1 - spatial.distance.cosine(source, target)
     return(result)
 
 def mean_AveragePrecision(data_root,N):
