@@ -11,8 +11,8 @@ from scipy import spatial
 from mAp.metrics import GlobalAveragePrecision as GAP
 from Config.Config import Config
 #https://tfhub.dev/google/collections/image/1
-#https://tfhub.dev/google/imagenet/inception_v3/feature_vector/5
-config = Config("inception_resnet_v2")
+#https://tfhub.dev/google/imagenet/mobilenet_v1_100_224/feature_vector/5
+config = Config("mobilenet_v1")
 model = hub.KerasLayer(config.MODEL_WEIGHTS,trainable=False)
 dbmodel = DBClass()
 dbmodel.open_connection()
@@ -87,7 +87,7 @@ def mean_AveragePrecision(data_root,N):
 if __name__=="__main__":
     #Generating MEan Average Precision
     data_path = "D:/ORG India/data/all_data"
-    mean_AveragePrecision(data_path,N=50)
+    mean_AveragePrecision(data_path,N=10)
 
 
 
@@ -99,7 +99,7 @@ if __name__=="__main__":
     # a = GAP(query_result,"1657513964760-chaminda products-chaminda#3.png")
 
     # Populating the db
-    # images_list = os.listdir("D:/ORG India/data/all_data")
+    # images_list = os.listdir("D:/ORG India/data/all_data")[:100]
     # populate_db("D:/ORG India/data/all_data",images_list)
 
     # Generating Saliency Graph in the output folders
