@@ -1,9 +1,22 @@
 from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from mobilenetv1 import Mobilenetv1
 import shutil
 import os
 import zipfile
 app = FastAPI()
+origins = [
+    "*",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 model = Mobilenetv1()
 training_status = None
 async def saveFile(fileobj):
